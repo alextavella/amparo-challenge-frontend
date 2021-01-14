@@ -30,6 +30,7 @@ export namespace LoadActivitiesModel {
     status_formatted: string
     name: string
     patient_name: string
+    patient_cpf: string
   }
 }
 
