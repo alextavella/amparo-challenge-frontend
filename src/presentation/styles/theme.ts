@@ -21,7 +21,7 @@ export const theme = {
       bgColor: colors['color-primary-500'],
       radius: '6px',
       space: '12px',
-      textColor: colors['color-primary-900'],
+      textColor: colors['color-primary-100'],
     },
     secondary: {
       bgColor: colors['color-secondary-500'],
