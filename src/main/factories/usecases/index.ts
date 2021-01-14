@@ -1,0 +1,5 @@
+export * from './change-activity-status/remote-change-activity-status-factory'
+export * from './create-activities/remote-create-activities-factory'
+export * from './create-patients/remote-create-patients-factory'
+export * from './load-activities/remote-load-activities-factory'
+export * from './search-patients/remote-search-patients-factory'
