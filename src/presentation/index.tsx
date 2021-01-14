@@ -1,7 +1,7 @@
+import { makeHomePage } from '@/main/factories/pages'
+import { ThemeProvider } from '@/presentation/containers'
 import React from 'react'
 
-const title = 'Amparo Challenge'
-
 export const App: React.FC = () => {
-  return <h1>{title}</h1>
+  return <ThemeProvider>{makeHomePage()}</ThemeProvider>
 }
