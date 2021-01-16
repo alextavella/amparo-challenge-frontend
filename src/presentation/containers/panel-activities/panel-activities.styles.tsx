@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Select } from '@/presentation/components'
 
 export const Container = styled.div`
   border-radius: ${props => `${props.theme.radii}px`};
@@ -80,4 +81,8 @@ export const TableActivities = styled.table.attrs({
       }
     }
   }
+`
+
+export const ActivityStatusSelect = styled(Select)`
+  padding: 0;
 `

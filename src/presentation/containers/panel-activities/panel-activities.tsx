@@ -1,8 +1,13 @@
-import { LoadActivitiesModel, Pagination } from '@/domain/models'
-import { LoadActivities } from '@/domain/usecases'
+import {
+  ActivityStatus,
+  LoadActivitiesModel,
+  Pagination,
+} from '@/domain/models'
+import { ChangeActivityStatus, LoadActivities } from '@/domain/usecases'
 import { Button, Input, InputDate } from '@/presentation/components'
 import React, { FormEvent } from 'react'
 import {
+  ActivityStatusSelect,
   Container,
   FilterBar,
   TableActivities,
@@ -10,14 +15,22 @@ import {
 
 interface PanelActivitiesProps {
   loadActiviesService: LoadActivities
+  changeActivityStatusService: ChangeActivityStatus
 }
 
 const initFilterParams = {
   date: new Date(),
 }
 
+const statusOptions = [
+  { label: 'Aberto', value: ActivityStatus.aberto },
+  { label: 'Atrasado', value: ActivityStatus.atrasado },
+  { label: 'Finalizado', value: ActivityStatus.finalizado },
+]
+
 const PanelActivities: React.FC<PanelActivitiesProps> = ({
   loadActiviesService,
+  changeActivityStatusService,
 }) => {
   const [paginationActivities, setPaginationActivities] = React.useState(
     {} as Pagination<LoadActivitiesModel.Response>,
@@ -38,9 +51,28 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
     [loadActiviesService],
   )
 
+  const changeActivityStatus = React.useCallback(
+    (id: string, status: number) => {
+      changeActivityStatusService
+        .change({
+          id,
+          status,
+        })
+        .catch(console.log)
+    },
+    [changeActivityStatusService],
+  )
+
   const handleSubmit = React.useCallback((event: FormEvent) => {
     event.preventDefault()
   }, [])
+
+  const handleChangeActivityStatus = React.useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>, activityId: string) => {
+      changeActivityStatus(activityId, +event.target.value)
+    },
+    [changeActivityStatus],
+  )
 
   React.useEffect(() => {
     search(initFilterParams)
@@ -73,7 +105,13 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
               <td>{activity.patient_cpf}</td>
               <td>{activity.expire_date_formatted}</td>
               <td>{activity.name}</td>
-              <td>{activity.status_formatted}</td>
+              <td>
+                <ActivityStatusSelect
+                  value={activity.status.toString()}
+                  options={statusOptions}
+                  onChange={e => handleChangeActivityStatus(e, activity.id)}
+                />
+              </td>
             </tr>
           ))}
         </tbody>
