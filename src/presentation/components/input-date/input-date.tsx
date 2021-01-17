@@ -1,10 +1,13 @@
+import Input, { InputProps } from '@/presentation/components/input/input'
 import React from 'react'
 import { InputContainer } from './input-date.styles'
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement>
-
-const Input: React.FC<InputProps> = (props: any) => {
-  return <InputContainer mask="99/99/9999" {...props} />
+const InputDate: React.FC<InputProps> = ({ disabled, ...rest }: any) => {
+  return (
+    <InputContainer mask="99/99/9999" disabled={disabled}>
+      <Input type="tel" disableUnderline {...rest} />
+    </InputContainer>
+  )
 }
 
-export default Input
+export default InputDate
