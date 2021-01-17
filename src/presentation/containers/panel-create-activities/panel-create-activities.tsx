@@ -72,7 +72,7 @@ const PanelCreateActivities: React.FC<PanelCreateActivitiesProps> = ({
         return
       }
       create.error()
-      if (error instanceof ApiError) {
+      if (error instanceof ApiError && !!error.errors) {
         formRef.current?.setErrors(error.errors)
         return
       }
