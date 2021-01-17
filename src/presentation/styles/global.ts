@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+import { formFieldset } from './form'
 
 export default createGlobalStyle`
   * {
@@ -16,4 +17,6 @@ export default createGlobalStyle`
     font-size: 14px;
     -webkit-font-smoothing: antialiased;
   }
+
+  ${formFieldset}
 `

@@ -5,6 +5,7 @@ import {
 } from '@/domain/models'
 import { ChangeActivityStatus, LoadActivities } from '@/domain/usecases'
 import { Button, Input, InputDate } from '@/presentation/components'
+import { Form } from '@unform/web'
 import React, { FormEvent } from 'react'
 import {
   ActivityStatusSelect,
@@ -27,6 +28,12 @@ const statusOptions = [
   { label: 'Atrasado', value: ActivityStatus.atrasado },
   { label: 'Finalizado', value: ActivityStatus.finalizado },
 ]
+
+type FormData = {
+  cpf: string
+  date: string
+  status: string
+}
 
 const PanelActivities: React.FC<PanelActivitiesProps> = ({
   loadActiviesService,
@@ -63,8 +70,8 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
     [changeActivityStatusService],
   )
 
-  const handleSubmit = React.useCallback((event: FormEvent) => {
-    event.preventDefault()
+  const handleSubmit = React.useCallback((data: FormData) => {
+    console.log(data)
   }, [])
 
   const handleChangeActivityStatus = React.useCallback(
@@ -81,12 +88,12 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
   return (
     <Container>
       <FilterBar>
-        <form onSubmit={handleSubmit}>
-          <Input placeholder="CPF do Paciente" />
-          <Input placeholder="Status do Aprazamento" />
-          <InputDate placeholder="Data" />
+        <Form onSubmit={handleSubmit}>
+          <Input name="cpf" placeholder="CPF do Paciente" />
+          <Input name="status" placeholder="Status do Aprazamento" />
+          <InputDate name="date" placeholder="Data" />
           <Button type="submit">Filtrar</Button>
-        </form>
+        </Form>
       </FilterBar>
       <TableActivities>
         <thead>

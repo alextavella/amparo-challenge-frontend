@@ -1,3 +1,4 @@
+export * from './app-provider'
 export * from './panel-activities'
 export * from './panel-create-activities'
 export * from './panel-create-patients'

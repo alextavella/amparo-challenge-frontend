@@ -2,6 +2,10 @@ import {
   makePanelCreateActivities,
   makePanelCreatePatients,
 } from '@/main/factories/containers'
+import ModalContent, {
+  ModalContentProps,
+} from '@/presentation/components/modal/modal.content'
+import { usePatient } from '@/presentation/hooks'
 import React, { useEffect } from 'react'
 
 export enum PanelRenders {
@@ -16,29 +20,45 @@ type Action<T> = {
 
 const panelRenderStateInitial = {
   panel: undefined,
+  size: { width: 500, height: 500 },
 }
 
 type PanelState = {
-  panel?: any
+  panel?: JSX.Element
+  size: { width: number; height: number }
 }
 
 const reducer = (state: PanelState, action: Action<PanelRenders>) => {
   switch (action.type) {
     case PanelRenders.patient:
-      return { panel: makePanelCreatePatients() }
+      return {
+        panel: makePanelCreatePatients(),
+        size: { width: 500, height: 320 },
+      }
     case PanelRenders.activity:
-      return { panel: makePanelCreateActivities() }
+      return {
+        panel: makePanelCreateActivities(),
+        size: { width: 500, height: 450 },
+      }
     default:
       return state
   }
 }
 
-type HomePanelProps = {
+interface HomePanelProps extends ModalContentProps {
   name: PanelRenders
 }
 
-const HomePanelComp: React.FC<HomePanelProps> = ({ name }) => {
+const HomePanel: React.FC<HomePanelProps> = ({ name, onClose }) => {
+  const { patientState } = usePatient()
+
   const [state, dispatch] = React.useReducer(reducer, panelRenderStateInitial)
+
+  useEffect(() => {
+    if (!!patientState.data) {
+      onClose()
+    }
+  }, [onClose, patientState])
 
   useEffect(() => {
     dispatch({ type: name })
@@ -47,7 +67,11 @@ const HomePanelComp: React.FC<HomePanelProps> = ({ name }) => {
     }
   }, [name])
 
-  return state.panel || null
+  return !!state.panel ? (
+    <ModalContent size={state.size} onClose={onClose}>
+      {state.panel}
+    </ModalContent>
+  ) : null
 }
 
-export const HomePanel = React.memo(HomePanelComp)
+export { HomePanel }

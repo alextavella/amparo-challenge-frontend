@@ -1,9 +1,9 @@
 import React from 'react'
 import { Container } from './panel-create-activities.styles'
 
-const PanelCreateActivities: React.FC = () => {
+const PanelCreateActivities: React.FC = ({ ...rest }) => {
   return (
-    <Container>
+    <Container {...rest}>
       <h2>Nova Atividade</h2>
     </Container>
   )

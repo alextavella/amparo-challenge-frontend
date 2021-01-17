@@ -1,5 +1,5 @@
 import { HttpClient, HttpStatusCode } from '@/data/protocols/http'
-import { UnexpectedError } from '@/domain/errors'
+import { ApiError, UnexpectedError } from '@/domain/errors'
 import { CreatePatients } from '@/domain/usecases'
 
 export class RemoteCreatePatients implements CreatePatients {
@@ -22,6 +22,8 @@ export class RemoteCreatePatients implements CreatePatients {
     switch (httpResponse.statusCode) {
       case HttpStatusCode.created:
         return response as CreatePatients.Response
+      case HttpStatusCode.badRequest:
+        throw new ApiError(response)
       default:
         throw new UnexpectedError()
     }

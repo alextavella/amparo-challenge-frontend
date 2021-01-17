@@ -20,9 +20,7 @@ export const FilterBar = styled.div`
   justify-content: center;
   flex-direction: row;
 
-  input + input,
-  input + button,
-  button + button {
+  .input-form + * {
     margin-left: 8px;
   }
 `
