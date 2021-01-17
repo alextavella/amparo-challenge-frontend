@@ -1,8 +1,12 @@
-import { PatientProvider } from '@/presentation/hooks'
+import { ActivityProvider, PatientProvider } from '@/presentation/hooks'
 import React from 'react'
 
 const AppProvider: React.FC = ({ children }) => {
-  return <PatientProvider>{children}</PatientProvider>
+  return (
+    <ActivityProvider>
+      <PatientProvider>{children}</PatientProvider>
+    </ActivityProvider>
+  )
 }
 
 export default AppProvider

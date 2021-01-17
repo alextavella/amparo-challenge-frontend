@@ -1,6 +1,7 @@
 export * from './button'
 export * from './header'
 export * from './input'
+export * from './input-autocomplete'
 export * from './input-cpf'
 export * from './input-date'
 export * from './modal'

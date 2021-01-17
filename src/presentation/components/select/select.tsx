@@ -1,26 +1,41 @@
+import { useField } from '@unform/core'
 import React from 'react'
-import { SelectContainer } from './select.styles'
+import { SelectContainer, SelectElement } from './select.styles'
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  value?: string
+  name: string
+  label?: string
   options: {
     label: string
     value: any
   }[]
+  disabled?: boolean
 }
 
-const Select: React.FC<SelectProps> = ({
-  options,
-  value: selected,
-  ...rest
-}) => {
+const Select: React.FC<SelectProps> = ({ name, label, options, ...rest }) => {
+  const selectRef = React.useRef<any>(null)
+
+  const { fieldName, defaultValue, registerField, error } = useField(name)
+
+  React.useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: selectRef.current,
+      getValue: (refs: HTMLSelectElement) => refs.value,
+    })
+  }, [fieldName, registerField])
+
   return (
-    <SelectContainer defaultValue={selected} {...rest}>
-      {options.map((opt, index) => (
-        <option key={`${index}-${opt.value}`} value={opt.value}>
-          {opt.label}
-        </option>
-      ))}
+    <SelectContainer className="input-form">
+      {!!label && <label htmlFor={name}>{label}:</label>}
+      <SelectElement ref={selectRef} defaultValue={defaultValue} {...rest}>
+        {options.map((opt, index) => (
+          <option key={`${index}-${opt.value}`} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </SelectElement>
+      {!!error && <span className="error">{error}</span>}
     </SelectContainer>
   )
 }

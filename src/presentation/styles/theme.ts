@@ -11,6 +11,7 @@ export const theme = {
   input: {
     root: {
       bgColor: '#fff',
+      border: '1px solid #ccc',
       radius: '6px',
       space: '12px',
       textColor: '#111',

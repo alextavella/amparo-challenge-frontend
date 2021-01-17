@@ -4,11 +4,12 @@ import {
   Pagination,
 } from '@/domain/models'
 import { ChangeActivityStatus, LoadActivities } from '@/domain/usecases'
-import { Button, Input, InputDate } from '@/presentation/components'
+import { Button, Input, InputDate, Select } from '@/presentation/components'
+import { useActivity } from '@/presentation/hooks'
+import { formatDate, parseToDate } from '@/presentation/utils'
 import { Form } from '@unform/web'
-import React, { FormEvent } from 'react'
+import React from 'react'
 import {
-  ActivityStatusSelect,
   Container,
   FilterBar,
   TableActivities,
@@ -19,8 +20,18 @@ interface PanelActivitiesProps {
   changeActivityStatusService: ChangeActivityStatus
 }
 
-const initFilterParams = {
-  date: new Date(),
+type FormData = {
+  cpf: string
+  date: string
+  status: string
+}
+
+type FilterData = {
+  date: string
+}
+
+const initFilterParams: FilterData = {
+  date: formatDate(new Date()),
 }
 
 const statusOptions = [
@@ -29,29 +40,31 @@ const statusOptions = [
   { label: 'Finalizado', value: ActivityStatus.finalizado },
 ]
 
-type FormData = {
-  cpf: string
-  date: string
-  status: string
-}
-
 const PanelActivities: React.FC<PanelActivitiesProps> = ({
   loadActiviesService,
   changeActivityStatusService,
 }) => {
+  const { activityState } = useActivity()
+
+  const [filter, setFilter] = React.useState(initFilterParams)
   const [paginationActivities, setPaginationActivities] = React.useState(
     {} as Pagination<LoadActivitiesModel.Response>,
   )
 
+  const [loaded, setLoaded] = React.useState<boolean>(false)
   const activities = React.useMemo<LoadActivitiesModel.Response[]>(
     () => paginationActivities?.data || [],
     [paginationActivities],
   )
 
   const search = React.useCallback(
-    (params: LoadActivitiesModel.Request) => {
+    (params: FilterData) => {
+      const payload: LoadActivitiesModel.Request = {
+        date: parseToDate(params.date),
+      }
+
       loadActiviesService
-        .load(params)
+        .load(payload)
         .then(response => setPaginationActivities(response))
         .catch(console.log)
     },
@@ -71,7 +84,8 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
   )
 
   const handleSubmit = React.useCallback((data: FormData) => {
-    console.log(data)
+    const { date } = data
+    setFilter({ date })
   }, [])
 
   const handleChangeActivityStatus = React.useCallback(
@@ -82,8 +96,11 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
   )
 
   React.useEffect(() => {
-    search(initFilterParams)
-  }, [search])
+    if (!loaded || !!activityState.data) {
+      setLoaded(true)
+      search(filter)
+    }
+  }, [loaded, activityState.data, filter, search])
 
   return (
     <Container>
@@ -113,11 +130,14 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
               <td>{activity.expire_date_formatted}</td>
               <td>{activity.name}</td>
               <td>
-                <ActivityStatusSelect
-                  value={activity.status.toString()}
-                  options={statusOptions}
-                  onChange={e => handleChangeActivityStatus(e, activity.id)}
-                />
+                <Form onSubmit={() => {}}>
+                  <Select
+                    name="status"
+                    options={statusOptions}
+                    defaultValue={activity.status.toString()}
+                    onChange={e => handleChangeActivityStatus(e, activity.id)}
+                  />
+                </Form>
               </td>
             </tr>
           ))}

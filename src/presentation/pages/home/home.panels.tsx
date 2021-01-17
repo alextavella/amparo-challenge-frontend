@@ -5,7 +5,7 @@ import {
 import ModalContent, {
   ModalContentProps,
 } from '@/presentation/components/modal/modal.content'
-import { usePatient } from '@/presentation/hooks'
+import { useActivity, usePatient } from '@/presentation/hooks'
 import React, { useEffect } from 'react'
 
 export enum PanelRenders {
@@ -51,14 +51,20 @@ interface HomePanelProps extends ModalContentProps {
 
 const HomePanel: React.FC<HomePanelProps> = ({ name, onClose }) => {
   const { patientState } = usePatient()
+  const { activityState } = useActivity()
 
   const [state, dispatch] = React.useReducer(reducer, panelRenderStateInitial)
 
+  const hasCreated = React.useMemo(
+    () => !!patientState.data || !!activityState.data,
+    [activityState.data, patientState.data],
+  )
+
   useEffect(() => {
-    if (!!patientState.data) {
+    if (hasCreated) {
       onClose()
     }
-  }, [onClose, patientState])
+  }, [hasCreated, onClose])
 
   useEffect(() => {
     dispatch({ type: name })

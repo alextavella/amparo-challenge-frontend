@@ -22,7 +22,6 @@ type PanelCreatePatientsProps = {
 const PanelCreatePatients: React.FC<PanelCreatePatientsProps> = ({
   createPatientsService,
   validationService,
-  ...rest
 }) => {
   const { create, patientState } = usePatient()
 
@@ -64,8 +63,14 @@ const PanelCreatePatients: React.FC<PanelCreatePatientsProps> = ({
     [handleError, register, validationService],
   )
 
+  React.useEffect(() => {
+    if (!!patientState.data) {
+      create.reset()
+    }
+  }, [patientState.data, create])
+
   return (
-    <Container {...rest}>
+    <Container>
       <fieldset className="form-fieldset">
         <legend>Novo Paciente</legend>
         <Form ref={formRef} onSubmit={handleSubmit}>
@@ -74,8 +79,12 @@ const PanelCreatePatients: React.FC<PanelCreatePatientsProps> = ({
             <InputCpf label="CPF" name="cpf" disabled={isDisabled} />
           </div>
           <div className="form-fieldset--controls">
-            <Button type="submit" disabled={isDisabled}>
-              Cadastrar
+            <Button
+              type="submit"
+              title="Cadastrar paciente"
+              disabled={isDisabled}
+            >
+              Cadastrar paciente
             </Button>
           </div>
         </Form>
