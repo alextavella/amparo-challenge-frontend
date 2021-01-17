@@ -11,8 +11,16 @@ export const Container = styled.div`
   bottom: 0;
 `
 
-export const BoxContent = styled.div`
-  background: #fff;
+type BoxContentProp = {
+  size: {
+    width: number
+    height: number
+  }
+}
+
+export const BoxContent = styled.div<BoxContentProp>`
+  width: ${props => `${props.size.width}px`};
+  height: ${props => `${props.size.height}px`};
 
   position: absolute;
   left: 0;
@@ -21,9 +29,7 @@ export const BoxContent = styled.div`
   bottom: 0;
   margin: auto;
 
-  width: 300px;
-  height: 300px;
-  padding: 10px;
+  background: #fff;
   z-index: 100;
 
   > button {
@@ -33,6 +39,8 @@ export const BoxContent = styled.div`
   }
 
   > div {
+    height: 100%;
+    width: 100%;
   }
 `
 

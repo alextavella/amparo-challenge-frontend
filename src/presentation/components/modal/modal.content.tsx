@@ -2,14 +2,22 @@ import { Button } from '@/presentation/components'
 import React from 'react'
 import { BoxContent, Container, Overlay } from './modal.styles'
 
-type ModalContentProps = {
+export type ModalContentProps = {
+  size?: {
+    width: number
+    height: number
+  }
   onClose(): void
 }
 
-const ModalContent: React.FC<ModalContentProps> = ({ children, onClose }) => {
+const ModalContent: React.FC<ModalContentProps> = ({
+  children,
+  size = { width: 500, height: 500 },
+  onClose,
+}) => {
   return (
     <Container>
-      <BoxContent>
+      <BoxContent size={size}>
         <Button color="secondary" onClick={onClose}>
           x
         </Button>
