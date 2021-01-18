@@ -1,13 +1,9 @@
-import Input, { InputProps } from '@/presentation/components/input/input'
+import { InputProps } from '@/presentation/components/input'
+import { InputMask } from '@/presentation/components/input-mask'
 import React from 'react'
-import { InputContainer } from './input-cpf.styles'
 
-const InputCpf: React.FC<InputProps> = ({ disabled, ...rest }: any) => {
-  return (
-    <InputContainer mask="999.999.999-99" disabled={disabled}>
-      <Input type="tel" disableUnderline {...rest} />
-    </InputContainer>
-  )
+const InputCpf: React.FC<InputProps> = ({ ...rest }: any) => {
+  return <InputMask mask="999.999.999-99" {...rest} />
 }
 
 export default InputCpf

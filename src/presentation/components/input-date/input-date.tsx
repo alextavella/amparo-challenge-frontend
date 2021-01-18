@@ -1,13 +1,9 @@
-import Input, { InputProps } from '@/presentation/components/input/input'
+import { InputProps } from '@/presentation/components/input'
+import { InputMask } from '@/presentation/components/input-mask'
 import React from 'react'
-import { InputContainer } from './input-date.styles'
 
-const InputDate: React.FC<InputProps> = ({ disabled, ...rest }: any) => {
-  return (
-    <InputContainer mask="99/99/9999" disabled={disabled}>
-      <Input type="tel" disableUnderline {...rest} />
-    </InputContainer>
-  )
+const InputDate: React.FC<InputProps> = ({ ...rest }: any) => {
+  return <InputMask mask="99/99/9999" {...rest} />
 }
 
 export default InputDate
