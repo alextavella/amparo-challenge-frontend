@@ -1,10 +1,16 @@
 import {
   ActivityStatus,
   LoadActivitiesModel,
-  Pagination,
+  PaginationModel,
 } from '@/domain/models'
 import { ChangeActivityStatus, LoadActivities } from '@/domain/usecases'
-import { Button, Input, InputDate, Select } from '@/presentation/components'
+import {
+  Button,
+  Input,
+  InputDate,
+  Pagination,
+  Select,
+} from '@/presentation/components'
 import { useActivity } from '@/presentation/hooks'
 import { formatDate, parseToDate } from '@/presentation/utils'
 import { Form } from '@unform/web'
@@ -27,10 +33,12 @@ type FormData = {
 }
 
 type FilterData = {
+  page: number
   date: string
 }
 
 const initFilterParams: FilterData = {
+  page: 1,
   date: formatDate(new Date()),
 }
 
@@ -46,12 +54,14 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
 }) => {
   const { activityState } = useActivity()
 
-  const [filter, setFilter] = React.useState(initFilterParams)
-  const [paginationActivities, setPaginationActivities] = React.useState(
-    {} as Pagination<LoadActivitiesModel.Response>,
-  )
+  const [filter, setFilter] = React.useState<FilterData>(initFilterParams)
+  const [paginationActivities, setPaginationActivities] = React.useState({
+    page: 0,
+    size: 0,
+    total: 0,
+    data: [],
+  } as PaginationModel<LoadActivitiesModel.Response>)
 
-  const [loaded, setLoaded] = React.useState<boolean>(false)
   const activities = React.useMemo<LoadActivitiesModel.Response[]>(
     () => paginationActivities?.data || [],
     [paginationActivities],
@@ -60,6 +70,7 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
   const search = React.useCallback(
     (params: FilterData) => {
       const payload: LoadActivitiesModel.Request = {
+        page: params.page,
         date: parseToDate(params.date),
       }
 
@@ -85,7 +96,7 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
 
   const handleSubmit = React.useCallback((data: FormData) => {
     const { date } = data
-    setFilter({ date })
+    setFilter(state => ({ ...state, date }))
   }, [])
 
   const handleChangeActivityStatus = React.useCallback(
@@ -95,12 +106,15 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
     [changeActivityStatus],
   )
 
+  const handlePagination = React.useCallback((page: number) => {
+    setFilter(state => ({ ...state, page }))
+  }, [])
+
   React.useEffect(() => {
-    if (!loaded || !!activityState.data) {
-      setLoaded(true)
+    if (filter || !!activityState.data) {
       search(filter)
     }
-  }, [loaded, activityState.data, filter, search])
+  }, [activityState.data, filter, search])
 
   return (
     <Container>
@@ -143,6 +157,11 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
           ))}
         </tbody>
       </TableActivities>
+      <Pagination
+        page={paginationActivities.page}
+        total={paginationActivities.total}
+        onClick={handlePagination}
+      />
     </Container>
   )
 }

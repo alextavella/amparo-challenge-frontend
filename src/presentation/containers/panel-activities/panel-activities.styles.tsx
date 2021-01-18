@@ -1,9 +1,12 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  border-radius: ${props => `${props.theme.radii}px`};
-
+  height: 100%;
   width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 `
 
 export const FilterBar = styled.div`

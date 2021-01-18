@@ -1,4 +1,4 @@
-import { LoadActivitiesModel, Pagination } from '@/domain/models'
+import { LoadActivitiesModel, PaginationModel } from '@/domain/models'
 
 export interface LoadActivities {
   load(request: LoadActivities.Request): Promise<LoadActivities.Response>
@@ -6,5 +6,5 @@ export interface LoadActivities {
 
 export namespace LoadActivities {
   export type Request = LoadActivitiesModel.Request
-  export type Response = Pagination<LoadActivitiesModel.Response>
+  export type Response = PaginationModel<LoadActivitiesModel.Response>
 }

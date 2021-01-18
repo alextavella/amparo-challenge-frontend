@@ -20,6 +20,7 @@ export namespace CreateActivityModel {
 
 export namespace LoadActivitiesModel {
   export type Request = {
+    page: number
     date: Date
   }
   export type Response = {

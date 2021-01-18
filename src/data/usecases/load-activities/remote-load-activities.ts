@@ -11,8 +11,10 @@ export class RemoteLoadActivities implements LoadActivities {
   async load(
     request: LoadActivities.Request,
   ): Promise<LoadActivities.Response> {
+    const { date, page } = request
+    const url = `${this.url}/${date.toISOString()}/?page=${page}&size=10`
     const httpResponse = await this.httpClient.request({
-      url: `${this.url}/${request.date.toISOString()}`,
+      url,
       method: 'get',
     })
 
