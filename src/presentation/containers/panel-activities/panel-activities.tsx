@@ -7,7 +7,7 @@ import {
 import { ChangeActivityStatus, LoadActivities } from '@/domain/usecases'
 import {
   Button,
-  Input,
+  InputCpf,
   InputDate,
   Pagination,
   Select,
@@ -197,7 +197,7 @@ const PanelActivities: React.FC<PanelActivitiesProps> = ({
     <Container>
       <FilterBar>
         <Form ref={formRef} onSubmit={handleSubmit} initialData={initFormData}>
-          <Input name="cpf" placeholder="CPF do Paciente" />
+          <InputCpf name="cpf" placeholder="CPF do Paciente" />
           <Select
             name="status"
             options={filterStatusOptions}
