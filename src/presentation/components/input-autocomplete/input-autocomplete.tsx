@@ -21,7 +21,7 @@ const InputAutocomplete: React.FC<InputAutoCompleteProps> = ({
   autoComplete: disabledAutoComplete,
   ...rest
 }: any) => {
-  const [value, setValue] = React.useState<string>(valueTerm)
+  const [inputText, setInputText] = React.useState<string>(valueTerm ?? '')
   const [searching, setSearching] = React.useState<boolean>(false)
   const [timer, setTimer] = React.useState<any>(0)
 
@@ -42,8 +42,12 @@ const InputAutocomplete: React.FC<InputAutoCompleteProps> = ({
 
   const handleChangeTerm = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      event.preventDefault()
+      event.stopPropagation()
+
       const term = event.target.value
-      setValue(term)
+      setInputText(term)
+
       if (term.length >= 3) {
         setSearching(true)
         searchTerm(term)
@@ -54,7 +58,7 @@ const InputAutocomplete: React.FC<InputAutoCompleteProps> = ({
 
   const handleSelectTerm = React.useCallback(
     (term: AutocompleteItem) => {
-      setValue(term.label)
+      setInputText(term.label)
       onAutoCompleteSelect(term.id)
     },
     [onAutoCompleteSelect],
@@ -64,10 +68,11 @@ const InputAutocomplete: React.FC<InputAutoCompleteProps> = ({
     <InputContainer className="input-form">
       <div className="input-content">
         <Input
-          onChange={handleChangeTerm}
-          value={value}
-          autoComplete="off"
           {...rest}
+          type="text"
+          value={inputText}
+          onChange={handleChangeTerm}
+          autoComplete="chrome-off"
         />
         {!!searching && <span>pesquisando...</span>}
       </div>

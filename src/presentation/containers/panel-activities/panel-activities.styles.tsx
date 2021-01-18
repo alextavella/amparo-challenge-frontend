@@ -3,10 +3,6 @@ import styled from 'styled-components'
 export const Container = styled.div`
   height: 100%;
   width: 100%;
-
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
 `
 
 export const FilterBar = styled.div`
@@ -22,8 +18,19 @@ export const FilterBar = styled.div`
   justify-content: center;
   flex-direction: row;
 
-  .input-form + * {
-    margin-left: 8px;
+  form {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: row;
+
+    .input-form + * {
+      margin-left: 8px;
+      width: 160px;
+    }
+    button {
+      height: 41px;
+    }
   }
 `
 
@@ -79,6 +86,13 @@ export const TableActivities = styled.table.attrs({
           border-bottom-right-radius: ${props => `${props.theme.radii}px`};
         }
       }
+    }
+
+    .table-empty {
+      padding: 10px;
+      font-size: 1rem;
+      font-style: italic;
+      text-align: center;
     }
   }
 `

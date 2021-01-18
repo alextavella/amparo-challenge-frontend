@@ -1,5 +1,6 @@
 import { HttpClient, HttpStatusCode } from '@/data/protocols/http'
-import { UnexpectedError } from '@/domain/errors'
+import { ApiError, UnexpectedError } from '@/domain/errors'
+import { ActivityStatus } from '@/domain/models'
 import { LoadActivities } from '@/domain/usecases'
 
 export class RemoteLoadActivities implements LoadActivities {
@@ -11,8 +12,18 @@ export class RemoteLoadActivities implements LoadActivities {
   async load(
     request: LoadActivities.Request,
   ): Promise<LoadActivities.Response> {
-    const { date, page } = request
-    const url = `${this.url}/${date.toISOString()}/?page=${page}&size=10`
+    const { date, status, cpf, page } = request
+
+    let url = `${this.url}/${date.toISOString()}/?page=${page}&size=10`
+
+    if (ActivityStatus[status as ActivityStatus]) {
+      url = `${url}&status=${status}`
+    }
+
+    if (!!cpf) {
+      url = `${url}&cpf=${cpf}`
+    }
+
     const httpResponse = await this.httpClient.request({
       url,
       method: 'get',
@@ -25,6 +36,8 @@ export class RemoteLoadActivities implements LoadActivities {
         return response as LoadActivities.Response
       case HttpStatusCode.noContent:
         return { page: 1, size: 1, total: 0, data: [] }
+      case HttpStatusCode.badRequest:
+        throw new ApiError(response)
       default:
         throw new UnexpectedError()
     }

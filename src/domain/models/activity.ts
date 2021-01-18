@@ -22,6 +22,8 @@ export namespace LoadActivitiesModel {
   export type Request = {
     page: number
     date: Date
+    cpf?: string
+    status?: ActivityStatus
   }
   export type Response = {
     id: string
@@ -44,7 +46,7 @@ export namespace ChangeActivityStatusModel {
 }
 
 export enum ActivityStatus {
-  aberto = 0,
-  atrasado = 1,
-  finalizado = 2,
+  aberto = 1,
+  atrasado = 2,
+  finalizado = 3,
 }

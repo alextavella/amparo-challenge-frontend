@@ -7,7 +7,7 @@ export class CreatePatientsValidation implements ObjectValidation {
   constructor() {
     this.schema = {
       name: Yup.string()
-        .matches(/\w\s\w+/, 'Nome deve ser composto')
+        .matches(/.+\s.+/, 'Nome deve ser composto')
         .required('Nome do endereço é obrigatório'),
       cpf: Yup.string()
         .matches(/[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}/, 'CPF incompleto')

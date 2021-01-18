@@ -2,6 +2,12 @@ import { ActivityStatus } from '@/domain/models'
 import { ObjectValidation } from '@/validation/protocols'
 import * as Yup from 'yup'
 
+const activity_status = [
+  ActivityStatus.aberto,
+  ActivityStatus.atrasado,
+  ActivityStatus.finalizado,
+]
+
 export class CreateActivitiesValidation implements ObjectValidation {
   readonly schema: { [key: string]: any }
 
@@ -15,11 +21,10 @@ export class CreateActivitiesValidation implements ObjectValidation {
         )
         .required('Status é obrigatório'),
       status: Yup.number()
-        .min(ActivityStatus.aberto, 'Status inválido')
-        .max(ActivityStatus.finalizado, 'Status inválido')
+        .oneOf(activity_status, 'Status inválido')
         .required('Status é obrigatório'),
       name: Yup.string()
-        .matches(/\w\s\w+/, 'Nome da atividade deve ser composto')
+        .matches(/.+\s.+/, 'Nome da atividade deve ser composto')
         .required('Nome da atividade é obrigatório'),
     }
   }

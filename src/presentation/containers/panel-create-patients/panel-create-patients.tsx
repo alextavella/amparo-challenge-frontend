@@ -75,8 +75,18 @@ const PanelCreatePatients: React.FC<PanelCreatePatientsProps> = ({
         <legend>Novo Paciente</legend>
         <Form ref={formRef} onSubmit={handleSubmit}>
           <div className="form-fieldset--inputs">
-            <Input label="Nome" name="name" disabled={isDisabled} />
-            <InputCpf label="CPF" name="cpf" disabled={isDisabled} />
+            <Input
+              label="Nome"
+              name="name"
+              disabled={isDisabled}
+              autoComplete="off"
+            />
+            <InputCpf
+              label="CPF"
+              name="cpf"
+              disabled={isDisabled}
+              autoComplete="off"
+            />
           </div>
           <div className="form-fieldset--controls">
             <Button
